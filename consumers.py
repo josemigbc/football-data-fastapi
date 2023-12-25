@@ -16,6 +16,13 @@ class Consumer:
         self.last_updated = None
         self.is_updating = False
         self.data: dict[str, dict[str, dict]] = { l:{} for l in self.competitions}
+    
+    @property   
+    def matches(self):
+        matches = []
+        for league, data in self.data.items():
+            matches.extend(data["matches"]["matches"])
+        return matches
 
     async def do_get(self, uri: str) -> dict | None:
         async with httpx.AsyncClient() as client:

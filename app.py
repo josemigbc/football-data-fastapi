@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException, BackgroundTasks
+from fastapi.middleware.cors import CORSMiddleware
 from consumers import Consumer
 from datetime import datetime, timedelta, date
 from contextlib import asynccontextmanager
@@ -17,6 +18,13 @@ async def lifespan(app: FastAPI):
     yield
 
 app = FastAPI(lifespan=lifespan)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=['https://football-data-nextjs.vercel.app', 'http://localhost:3000'],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 async def update_data() -> None:
     if consumer.is_updating:

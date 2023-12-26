@@ -35,7 +35,13 @@ class Consumer:
                 return response.json()
     
     async def do_operation(self, league: str, data_type: str):
-        data = await self.do_get(f"/{league}{f'/{data_type}' if data_type != 'competition' else ''}")
+        attemps = 0
+        data = {}
+        while not (data or attemps > 3):
+            try:
+                data = await self.do_get(f"/{league}{f'/{data_type}' if data_type != 'competition' else ''}")
+            except:
+                attemps += 1  
         if data:
             self.data[league][data_type] = data
             return True

@@ -21,7 +21,10 @@ class Consumer:
     def matches(self):
         matches = []
         for league, data in self.data.items():
-            matches.extend(data["matches"]["matches"])
+            try:
+                matches.extend(data["matches"]["matches"])
+            except KeyError:
+                pass
         return matches
 
     async def do_get(self, uri: str) -> dict | None:
